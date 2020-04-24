@@ -1,12 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 
 
-class Post(models.Model):
-    post = models.CharField(max_length=500)
+class UserPost(models.Model):
+    email = models.CharField(max_length=500)
+    panel_size = models.CharField(max_length=500)
+    panel_holes_punch_qty = models.DecimalField(decimal_places=0, max_digits=500)
+    panel_holes_cut_qty = models.DecimalField(decimal_places=0, max_digits=500)
     # User = models.ForeignKey('User', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    
+#class user_input(models.Model):
+    
     
 # class Friend(models.Model):
     # users = models.ManyToManyField(User)

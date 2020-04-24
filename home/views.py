@@ -3,43 +3,53 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 
 from home.forms import HomeForm
-from home.models import Post
+from home.models import UserPost
 #, Friend
 
+def UserPost_create_view(request):
+    form = HomeForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        form = HomeForm(request.POST or None)
+        
+    context = {'form': form}
+    return render(request, "home/home.html", context)
 
-class HomeView(TemplateView):
-    template_name = 'home/home.html'
 
-    def get(self, request):
-        form = HomeForm()
-        posts = Post.objects.all().order_by('-created')
-        users = User.objects.exclude(id=request.user.id)
-        # friend = Friend.objects.get(current_user=request.user)
-        # friends = friend.users.all()
 
-        args = {
-            'form': form, 'posts': posts, 'users': users
-        }
-        return render(request, self.template_name, args)
+# class HomeView(TemplateView):
+    # template_name = 'home/home.html'
 
-    def post(self, request):
-        form = HomeForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user
-            post.save()
+    # def get(self, request):
+        # form = HomeForm()
+        # posts = UserPost.objects.all().order_by('-created')
+        # users = User.objects.exclude(id=request.user.id)
+        # # friend = Friend.objects.get(current_user=request.user)
+        # # friends = friend.users.all()
 
-            text = form.cleaned_data['post']
-            form = HomeForm()
-            return redirect('home:home')
+        # args = {
+            # 'form': form, 'posts': posts, 'users': users
+        # }
+        # return render(request, self.template_name, args)
 
-        args = {'form': form, 'text': text}
-        return render(request, self.template_name, args)
+    # def post(self, request):
+        # form = HomeForm(request.POST)
+        # if form.is_valid():
+            # post = form.save(commit=False)
+            # #post.user = request.user
+            # post.save()
 
-def change_friends(request, operation, pk):
-    friend = User.objects.get(pk=pk)
-    if operation == 'add':
-        Friend.make_friend(request.user, friend)
-    elif operation == 'remove':
-        Friend.lose_friend(request.user, friend)
-    return redirect('home:home')
+            # text = form.cleaned_data['email']
+            # form = HomeForm()
+            # return redirect('home:home')
+
+        # args = {'form': form, 'text': text}
+        # return render(request, self.template_name, args)
+
+# # def change_friends(request, operation, pk):
+    # # friend = User.objects.get(pk=pk)
+    # # if operation == 'add':
+        # # Friend.make_friend(request.user, friend)
+    # # elif operation == 'remove':
+        # # Friend.lose_friend(request.user, friend)
+    # # return redirect('home:home')

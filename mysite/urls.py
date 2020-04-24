@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls import url
-from home.views import HomeView
+from home.views import UserPost_create_view
 
 urlpatterns = [
     path('polls/', include('polls.urls')),
